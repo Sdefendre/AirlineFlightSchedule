@@ -280,7 +280,8 @@ public class FlightSchedule {
         flight.setArrivalInfo(
                 new DepartureArrivalInfo(dayOfWeek, time, airportCode, gate)
         );
-
+        // notify user that the flight is added
+        System.out.println("Flight [" + flight.getFlightNumber() + "] is added");
     }//addFlight
 
     public void cancelFlight() {
