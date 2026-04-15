@@ -221,6 +221,9 @@ public class FlightSchedule {
     }//addAirline
 
     public boolean isValidAirlineCode(String code) {
+        if (code == null) {
+            return false;
+        }
         for (Airline oneAirline : airlines) {
             if (code.equals(oneAirline.getCode())) {
                 return true;
@@ -230,6 +233,9 @@ public class FlightSchedule {
     }//isValidAirlineCode
 
     public Airline getAirline(String code) {
+        if (code == null) {
+            return null;
+        }
         for (Airline oneAirline : airlines) {
             if (code.equals(oneAirline.getCode())) {
                 return oneAirline;
