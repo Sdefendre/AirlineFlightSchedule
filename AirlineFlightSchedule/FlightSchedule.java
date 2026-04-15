@@ -2,6 +2,7 @@ package AirlineFlightSchedule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Collections;
@@ -11,15 +12,18 @@ public class FlightSchedule {
     // data attributes
     private int currentTime; // in range 0 to 2359
     private char currentDay; // U, M, T, W, R, F, S
-    private ArrayList<Airline> airlines;
+    private Map<String, Airline> airlines;
     private HashMap< String/*DL100*/, Flight> flightMap;
 
     public void populateDebugData() {
-        airlines.add(new Airline("DL"));
-        airlines.add(new Airline("AA"));
-        airlines.add(new Airline("LH"));
+        Airline dl = new Airline("DL");
+        airlines.put(dl.getCode(), dl);
+        Airline aa = new Airline("AA");
+        airlines.put(aa.getCode(), aa);
+        Airline lh = new Airline("LH");
+        airlines.put(lh.getCode(), lh);
         Random random = new Random();
-        for (Airline airline : airlines) {
+        for (Airline airline : airlines.values()) {
             int count = 3; // create this many random fights for each airline
             while (count-- > 0) {
                 // randomly construct a value in range 100 - 999
@@ -176,7 +180,7 @@ public class FlightSchedule {
     private void resetSchedule() {
         currentTime = 0;
         currentDay = 'M';
-        airlines = new ArrayList<>();
+        airlines = new LinkedHashMap<>();
         flightMap = new HashMap<>();
     }
 
@@ -215,27 +219,17 @@ public class FlightSchedule {
         }
         Airline airline = new Airline();
         airline.setCode(code);
-        airlines.add(airline);
+        airlines.put(airline.getCode(), airline);
         System.out.println("Airline [" + code + "] sucessfully added.");
         Validator.pause();
     }//addAirline
 
     public boolean isValidAirlineCode(String code) {
-        for (Airline oneAirline : airlines) {
-            if (code.equals(oneAirline.getCode())) {
-                return true;
-            }
-        }
-        return false;
+        return airlines.containsKey(code);
     }//isValidAirlineCode
 
     public Airline getAirline(String code) {
-        for (Airline oneAirline : airlines) {
-            if (code.equals(oneAirline.getCode())) {
-                return oneAirline;
-            }
-        }
-        return null;
+        return airlines.get(code);
     }//getAirline
 
     public boolean isFlightExist(String flightNumber/*DL100*/) {
