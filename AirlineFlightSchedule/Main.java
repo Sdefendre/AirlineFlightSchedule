@@ -26,7 +26,6 @@ public class Main{
                     schedule.addFlight();
                     break;
                 case Menu.Cancel_Flight:
-                    //System.out.println("*** UNIMPLEMENTED ***");
                     schedule.cancelFlight();
                     break;
                 case Menu.Show_Flight_Info:
@@ -36,11 +35,9 @@ public class Main{
                     schedule.showDepartures();
                     break;
                 case Menu.Show_Arrivals:
-                    //System.out.println("*** UNIMPLEMENTED ***");
                     schedule.showArrivals();
                     break;
                 case Menu.Find_Flights_Between_Two_Airports:
-                    //System.out.println("*** UNIMPLEMENTED ***");
                     schedule.findFlightsBetweenTwoAirports();
                     break;
                 case Menu.Exit:

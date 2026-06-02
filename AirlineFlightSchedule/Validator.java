@@ -25,14 +25,21 @@ public class Validator {
     public static int getInt2(String prompt) {
         int result;
         for (;;) {
-            System.out.print(prompt);
-            if (sc.hasNextInt()) {
-                result = sc.nextInt();
-                sc.nextLine(); // eliminate newline from input buffer
-                return result;
-            } else {
-                System.out.println("\t*** Invalid number format ***");
-                sc.nextLine(); // trash non-numeric input
+            try {
+                System.out.print(prompt);
+                if (sc.hasNextInt()) {
+                    result = sc.nextInt();
+                    sc.nextLine(); // eliminate newline from input buffer
+                    return result;
+                } else {
+                    if (!sc.hasNext()) {
+                        handleStreamClosure();
+                    }
+                    System.out.println("\t*** Invalid number format ***");
+                    sc.nextLine(); // trash non-numeric input
+                }
+            } catch (java.util.NoSuchElementException | java.lang.IllegalStateException ex) {
+                handleStreamClosure();
             }
         }
     }//getInt2
@@ -46,7 +53,13 @@ public class Validator {
                 return result;
             } catch (java.util.InputMismatchException ex) {
                 System.out.println("\t*** Invalid number format ***");
-                sc.nextLine(); // trash non-numeric input
+                try {
+                    sc.nextLine(); // trash non-numeric input
+                } catch (java.util.NoSuchElementException | java.lang.IllegalStateException e) {
+                    handleStreamClosure();
+                }
+            } catch (java.util.NoSuchElementException | java.lang.IllegalStateException ex) {
+                handleStreamClosure();
             }
         }
     }//getInt
@@ -70,20 +83,36 @@ public class Validator {
     }//getInt
     
     public static void pause() {
-        System.out.println("Press Enter to continue");
-        Validator.sc.nextLine();
+        try {
+            System.out.println("Press Enter to continue");
+            Validator.sc.nextLine();
+        } catch (java.util.NoSuchElementException | java.lang.IllegalStateException ex) {
+            handleStreamClosure();
+        }
     }//pause
     
     public static String getString(String prompt) {
         String result = "";
         while (result.equals("")) {
-            System.out.print(prompt);
-            result = sc.nextLine();
-            if (result.equals("")) {
-                System.out.println("\t*** Input cannot be empty ***");
+            try {
+                System.out.print(prompt);
+                if (!sc.hasNextLine()) {
+                    handleStreamClosure();
+                }
+                result = sc.nextLine();
+                if (result.equals("")) {
+                    System.out.println("\t*** Input cannot be empty ***");
+                }
+            } catch (java.util.NoSuchElementException | java.lang.IllegalStateException ex) {
+                handleStreamClosure();
             }
         }
         return result;
     }//getString  
+
+    private static void handleStreamClosure() {
+        System.err.println("\n*** Input stream closed. Exiting. ***");
+        System.exit(1);
+    }
 
 }//class Validator
